@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petualangan Jelajah IPAS Kelas 6: Misi Penjaga Nusantara & Dunia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 40%, #bae6fd 75%, #e0f2fe 100%);
+      color: #1e293b;
+      user-select: none;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+    }
+
+    /* Animated Clouds & Floating Islands */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes floatMedium {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1deg); }
+    }
+    @keyframes driftCloud {
+      0% { transform: translateX(-120px); }
+      100% { transform: translateX(calc(100vw + 140px)); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      70% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.65); }
+      50% { box-shadow: 0 0 0 12px rgba(250, 204, 21, 0); }
+    }
+    @keyframes shakeWrong {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    .animate-float-slow { animation: floatSlow 4s ease-in-out infinite; }
+    .animate-float-med { animation: floatMedium 3.2s ease-in-out infinite; }
+    .animate-pop { animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .animate-pulse-glow { animation: pulseGlow 2s infinite; }
+    .animate-shake { animation: shakeWrong 0.45s ease-in-out; }
+
+    .cloud {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.75;
+    }
+    .cloud-1 { top: 8%; animation: driftCloud 46s linear infinite; }
+    .cloud-2 { top: 22%; animation: driftCloud 64s linear infinite -20s; }
+    .cloud-3 { top: 48%; animation: driftCloud 54s linear infinite -35s; }
+
+    /* Tactile 3D Cartoon Buttons */
+    .btn-3d {
+      transition: all 0.14s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-bottom-width: 5px;
+      cursor: pointer;
+    }
+    .btn-3d:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+    }
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+    .btn-3d:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* Card Style */
+    .card-adventure {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 3px solid #ffffff;
+      box-shadow: 0 12px 28px -6px rgba(14, 116, 144, 0.22), 0 4px 0 rgba(148, 163, 184, 0.25);
+      border-radius: 1.5rem;
+    }
+
+    /* Island Card Hover */
+    .island-card {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+    .island-card:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.4); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 99px; }
+
+    /* Particle Canvas */
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    /* Print Certificate cleanly */
+    @media print {
+      body { background: white !important; }
+      .no-print { display: none !important; }
+      .print-only-clean { box-shadow: none !important; border: 3px solid #f59e0b !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle FX Canvas -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Decorative Moving Clouds -->
+  <div class="cloud cloud-1 no-print" aria-hidden="true">
+    <svg width="130" height="56" viewBox="0 0 130 56" fill="none">
+      <path d="M28 52H104C116.15 52 126 42.15 126 30C126 18.6 117.3 9.2 106.2 8.1C101.5 3.1 94.8 0 87.3 0C76.2 0 66.7 6.9 62.9 16.7C59.8 14.9 56.2 13.9 52.3 13.9C41.3 13.9 32.3 22.3 31.3 33.1C20.2 34.4 11.6 43.8 11.6 52H28Z" fill="white"/>
+    </svg>
+  </div>
+  <div class="cloud cloud-2 no-print" aria-hidden="true">
+    <svg width="100" height="44" viewBox="0 0 130 56" fill="none">
+      <path d="M28 52H104C116.15 52 126 42.15 126 30C126 18.6 117.3 9.2 106.2 8.1C101.5 3.1 94.8 0 87.3 0C76.2 0 66.7 6.9 62.9 16.7C59.8 14.9 56.2 13.9 52.3 13.9C41.3 13.9 32.3 22.3 31.3 33.1C20.2 34.4 11.6 43.8 11.6 52H28Z" fill="white"/>
+    </svg>
+  </div>
+  <div class="cloud cloud-3 no-print" aria-hidden="true">
+    <svg width="150" height="62" viewBox="0 0 130 56" fill="none">
+      <path d="M28 52H104C116.15 52 126 42.15 126 30C126 18.6 117.3 9.2 106.2 8.1C101.5 3.1 94.8 0 87.3 0C76.2 0 66.7 6.9 62.9 16.7C59.8 14.9 56.2 13.9 52.3 13.9C41.3 13.9 32.3 22.3 31.3 33.1C20.2 34.4 11.6 43.8 11.6 52H28Z" fill="white"/>
+    </svg>
+  </div>
+
+  <!-- Top HUD Bar (Visible after game starts) -->
+  <header id="hud-bar" class="hidden sticky top-0 z-40 px-3 pt-2 pb-1 no-print">
+    <div class="max-w-5xl mx-auto bg-white/95 backdrop-blur-md border-2 border-sky-200 rounded-2xl px-3 py-2 shadow-md flex flex-wrap items-center justify-between gap-2">
+      <!-- Player Profile -->
+      <div class="flex items-center gap-2.5">
+        <div id="hud-avatar" class="w-10 h-10 rounded-xl bg-amber-100 border-2 border-amber-400 flex items-center justify-center text-2xl shadow-inner">🧑‍🔬</div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span id="hud-name" class="font-display font-bold text-slate-800 text-sm sm:text-base leading-tight">Petualang</span>
+            <span id="hud-role" class="hidden sm:inline-block text-[11px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-700">Penjelajah Sains</span>
+          </div>
+          <div class="flex items-center gap-1 mt-0.5" id="hud-badges" title="Koleksi Lencana">
+            <!-- Mini badge slots populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats: Hearts, Streak, XP, Sound -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Hearts / Energy -->
+        <div class="flex items-center gap-1 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-xl" title="Energi Petualang">
+          <span id="hud-hearts" class="text-sm sm:text-base tracking-tighter">❤️❤️❤️❤️❤️</span>
+        </div>
+
+        <!-- Streak -->
+        <div id="hud-streak-box" class="hidden sm:flex items-center gap-1 bg-orange-50 border border-orange-200 px-2.5 py-1 rounded-xl" title="Jawaban Benar Beruntun">
+          <span class="text-base">🔥</span>
+          <span id="hud-streak" class="font-display font-bold text-orange-600 text-sm">0</span>
+        </div>
+
+        <!-- XP Points -->
+        <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-300 px-3 py-1 rounded-xl shadow-inner" title="Poin Pengalaman (XP)">
+          <span class="text-base">⭐</span>
+          <span id="hud-xp" class="font-display font-bold text-amber-700 text-sm sm:text-base">0 XP</span>
+        </div>
+
+        <!-- Map Button -->
+        <button id="btn-back-map" onclick="goToMap()" class="hidden btn-3d bg-sky-500 hover:bg-sky-400 text-white border-sky-700 font-display font-semibold text-xs sm:text-sm px-3 py-1.5 rounded-xl flex items-center gap-1">
+          <span>🗺️</span> <span class="hidden md:inline">Peta Pulau</span>
+        </button>
+
+        <!-- Sound Toggle -->
+        <button id="btn-sound" onclick="toggleSound()" class="btn-3d bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300 p-2 rounded-xl text-sm" title="Suara Efek">
+          🔊
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Container -->
+  <main id="app-root" class="relative z-10 max-w-5xl mx-auto px-3 sm:px-5 py-4 sm:py-6 pb-16">
+    <!-- Dynamic Views Rendered Here -->
+  </main>
+
+  <!-- Guidebook / Stimulus Modal -->
+  <div id="stimulus-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
+    <div class="card-adventure w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden animate-pop">
+      <div id="modal-header" class="px-5 py-4 bg-gradient-to-r from-amber-400 to-orange-400 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">📖</span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-90">Buku Panduan Petualang</p>
+            <h3 id="modal-title" class="font-display font-bold text-lg sm:text-xl leading-tight">Judul Stimulus</h3>
+          </div>
+        </div>
+        <button onclick="closeStimulusModal()" class="w-9 h-9 rounded-full bg-white/25 hover:bg-white/40 flex items-center justify-center font-bold text-lg">✕</button>
+      </div>
+      <div id="modal-body" class="p-5 overflow-y-auto text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+        <!-- Stimulus content injected here -->
+      </div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeStimulusModal()" class="btn-3d bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700 font-display font-bold px-5 py-2 rounded-xl">
+          Siap Lanjut Misi! 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Toast Notification (No alert() used anywhere) -->
+  <div id="toast-box" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-800 text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-sm flex items-center gap-2 animate-pop">
+    <span id="toast-icon">💡</span>
+    <span id="toast-msg">Pesan</span>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. WEB AUDIO API SOUND SYNTHESIZER (No external audio files needed)
+       ========================================================================= */
+    const SoundFX = {
+      ctx: null,
+      enabled: true,
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playTone(freq, type, duration, delay = 0, vol = 0.16) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime + delay;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(vol, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      },
+      click() {
+        this.playTone(540, 'sine', 0.08, 0, 0.12);
+      },
+      correct() {
+        this.playTone(523.25, 'triangle', 0.14, 0, 0.18);    // C5
+        this.playTone(659.25, 'triangle', 0.14, 0.09, 0.18); // E5
+        this.playTone(783.99, 'triangle', 0.25, 0.18, 0.2);  // G5
+      },
+      wrong() {
+        this.playTone(300, 'sawtooth', 0.18, 0, 0.12);
+        this.playTone(230, 'sawtooth', 0.26, 0.14, 0.12);
+      },
+      badge() {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((n, idx) => {
+          this.playTone(n, 'triangle', 0.22, idx * 0.1, 0.2);
+        });
+      }
+    };
+
+    function toggleSound() {
+      SoundFX.enabled = !SoundFX.enabled;
+      const btn = document.getElementById('btn-sound');
+      btn.textContent = SoundFX.enabled ? '🔊' : '🔇';
+      if (SoundFX.enabled) SoundFX.click();
+    }
+
+    /* =========================================================================
+       2. PARTICLE STARBURST ENGINE (Canvas FX)
+       ========================================================================= */
+    const ParticleFX = {
+      canvas: document.getElementById('fx-canvas'),
+      ctx: null,
+      particles: [],
+      running: false,
+      init() {
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      },
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      },
+      burst(x, y, count = 28) {
+        const colors = ['#facc15', '#fb923c', '#34d399', '#38bdf8', '#f472b6', '#a78bfa'];
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+          const speed = 3 + Math.random() * 6;
+          this.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 2,
+            size: 5 + Math.random() * 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            rot: Math.random() * Math.PI * 2,
+            vRot: (Math.random() - 0.5) * 0.2,
+            isStar: Math.random() > 0.35
+          });
+        }
+        if (!this.running) {
+          this.running = true;
+          this.loop();
+        }
+      },
+      drawStar(ctx, r) {
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(Math.cos(((18 + i * 72) * Math.PI) / 180) * r, -Math.sin(((18 + i * 72) * Math.PI) / 180) * r);
+          ctx.lineTo(Math.cos(((54 + i * 72) * Math.PI) / 180) * (r * 0.45), -Math.sin(((54 + i * 72) * Math.PI) / 180) * (r * 0.45));
+        }
+        ctx.closePath();
+        ctx.fill();
+      },
+      loop() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.18; // gravity
+          p.alpha -= 0.018;
+          p.rot += p.vRot;
+          if (p.alpha <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          this.ctx.save();
+          this.ctx.globalAlpha = Math.max(0, p.alpha);
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate(p.rot);
+          this.ctx.fillStyle = p.color;
+          if (p.isStar) {
+            this.drawStar(this.ctx, p.size);
+          } else {
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, p.size * 0.6, 0, Math.PI * 2);
+            this.ctx.fill();
+          }
+          this.ctx.restore();
+        }
+        if (this.particles.length > 0) {
+          requestAnimationFrame(() => this.loop());
+        } else {
+          this.running = false;
+        }
+      }
+    };
+
+    /* =========================================================================
+       3. GAME CURRICULUM DATA (Adapted directly from the 30 AKM IPAS Questions)
+       ========================================================================= */
+    const AVATARS = [
+      { id: 'sains', emoji: '🧑‍🔬', role: 'Penjelajah Sains', desc: 'Ahli sistem tubuh & eksperimen alam', color: 'bg-emerald-100 border-emerald-400 text-emerald-800' },
+      { id: 'sejarah', emoji: '🧭', role: 'Sejarawan Muda', desc: 'Penjaga jejak perjuangan Nusantara', color: 'bg-amber-100 border-amber-400 text-amber-800' },
+      { id: 'navigator', emoji: '🌍', role: 'Navigator Dunia', desc: 'Penjelajah 6 benua & potensi bumi', color: 'bg-sky-100 border-sky-400 text-sky-800' },
+      { id: 'budaya', emoji: '🎭', role: 'Duta Budaya', desc: 'Pelestari warisan Indonesia mendunia', color: 'bg-purple-100 border-purple-400 text-purple-800' }
+    ];
+
+    const ZONES = [
+      {
+        id: 0,
+        bab: 'Bab 1',
+        title: 'Lab Tubuh & Arena Atletik',
+        subtitle: 'Sistem Gerak, Sendi, Otot, Saraf & Kesehatan Tulang',
+        icon: '🏃‍♂️',
+        badgeName: 'Lencana Atlet Sehat',
+        badgeIcon: '🏅',
+        themeGradient: 'from-emerald-400 to-teal-500',
+        cardBg: 'bg-emerald-50 border-emerald-300',
+        accentText: 'text-emerald-700',
+        btnColor: 'bg-emerald-500 hover:bg-emerald-400 border-emerald-700',
+        stimulusTitle: 'Stimulus 1: Lomba Lari Estafet & Kesehatan Tubuh',
+        stimulusHTML: `
+          <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 space-y-2.5">
+            <p>🏃‍♂️ <strong>Lomba Lari Estafet 4 x 100 Meter:</strong> Sebelum berlari, siswa kelas 6 melakukan pemanasan selama 10 menit. Saat aba-aba <em>"Bersedia... Siap... Ya!"</em> terdengar, pelari pertama langsung melesat.</p>
+            <p>🧠 <strong>Koordinasi Saraf & Gerak:</strong> Mata menangkap tanda start, sinyal dikirim melalui <strong>jaringan saraf ke otak</strong>, lalu diteruskan ke otot-otot kaki dan lengan agar bergerak serempak pada sendi lutut, bahu, dan pergelangan tangan.</p>
+            <p>🦴 <strong>Menjaga Postur & Tulang:</strong> Membawa tas terlalu berat di satu bahu terus-menerus atau duduk membungkuk dapat memicu <strong>gangguan pada tulang belakang dan otot</strong>. Pola makan bergizi kaya <strong>kalsium dan vitamin D</strong> serta olahraga teratur menjaga kekuatan tulang dan kelenturan otot.</p>
+          </div>
+        `,
+        missions: [
+          {
+            akmRef: 'AKM Soal 1 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Berdasarkan catatan di Arena Atletik, apa akibat yang dapat muncul jika seseorang membawa tas terlalu berat di satu bahu secara terus-menerus atau duduk membungkuk?',
+            options: [
+              'Meningkatkan kelenturan otot lengan secara alami',
+              'Memicu gangguan pada tulang belakang dan otot',
+              'Mempercepat pengiriman sinyal saraf ke mata',
+              'Memperpanjang tulang kaki saat berlari'
+            ],
+            answer: 1,
+            explanation: 'Beban berat sebelah atau duduk membungkuk terus-menerus memberi tekanan tidak seimbang sehingga memicu gangguan pada tulang belakang dan otot.'
+          },
+          {
+            akmRef: 'AKM Soal 2 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Saat pelari estafet mengayunkan lengan dan melangkahkan kaki, bagaimana otot dan sendi bekerja sama menghasilkan gerakan?',
+            options: [
+              'Sendi menarik tulang tanpa bantuan otot, sedangkan otot hanya melindungi organ dalam',
+              'Otot berkontraksi dan berelaksasi menarik tulang sehingga sendi memungkinkan arah gerak tertentu',
+              'Tulang menghasilkan energi gerak sendiri lalu menggerakkan otot dan sendi',
+              'Sendi mengeras saat bergerak agar tulang tidak bergeser dari tempatnya'
+            ],
+            answer: 1,
+            explanation: 'Otot adalah alat gerak aktif yang berkontraksi dan berelaksasi menarik tulang, sementara sendi menghubungkan tulang dan memungkinkan arah gerak.'
+          },
+          {
+            akmRef: 'AKM Soal 3 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Urutan respons tubuh yang tepat saat pelari mendengar aba-aba start dan melihat tanda mulai adalah...',
+            options: [
+              'Otot kaki bergerak → otak memproses → indra menerima rangsang',
+              'Indra menerima rangsang → sinyal dikirim melalui saraf ke otak → otak meneruskan perintah ke otot',
+              'Tulang belakang memerintahkan mata → otot beristirahat → otak menerima sinyal',
+              'Sendi mengirim sinyal ke otak → mata menutup → otot berhenti bekerja'
+            ],
+            answer: 1,
+            explanation: 'Indra (mata/telinga) menangkap aba-aba, saraf membawa sinyal ke otak untuk diolah, lalu otak mengirim perintah gerak ke otot.'
+          },
+          {
+            akmRef: 'AKM Soal 4 • Pilihan Ganda (Penalaran)',
+            type: 'pg',
+            prompt: 'Raka sering bermain gawai sambil tiduran miring dan jarang berjemur atau mengonsumsi makanan berkalsium. Simpulan yang paling tepat mengenai kondisi sistem gerak Raka adalah...',
+            options: [
+              'Raka pasti memiliki otot yang lebih kuat daripada pelari estafet',
+              'Raka berisiko mengalami gangguan postur atau penurunan kesehatan tulang jika kebiasaan tersebut berlanjut',
+              'Kebiasaan bermain gawai sambil miring akan memperkuat sendi lutut secara otomatis',
+              'Raka tidak memerlukan olahraga karena sudah menggerakkan jari saat bermain gawai'
+            ],
+            answer: 1,
+            explanation: 'Postur miring terus-menerus ditambah kurangnya kalsium dan vitamin D (sinar matahari pagi) berisiko mengganggu postur dan kekuatan tulang.'
+          },
+          {
+            akmRef: 'AKM Soal 16 • Pilihan Ganda Kompleks',
+            type: 'pgk_check',
+            prompt: 'Pilih SEMUA pernyataan yang BENAR tentang sistem gerak dan saraf saat berolahraga! (Ada 3 jawaban benar)',
+            items: [
+              'Pemanasan sebelum berlari membantu mempersiapkan tubuh sebelum aktivitas fisik intensif.',
+              'Sistem saraf berperan meneruskan informasi dari indra ke otak dan mengoordinasikan gerak otot.',
+              'Sendi hanya terdapat pada bagian kepala dan tidak berperan saat kaki melangkah.',
+              'Asupan kalsium dan vitamin D mendukung kesehatan tulang.'
+            ],
+            correctIndices: [0, 1, 3],
+            explanation: 'Pemanasan, koordinasi sistem saraf, serta asupan kalsium & vitamin D benar. Sendi terdapat di berbagai bagian tubuh (lutut, bahu, siku, dll.), bukan hanya kepala!'
+          },
+          {
+            akmRef: 'AKM Soal 19 • Mini-Game Menjodohkan',
+            type: 'match',
+            prompt: 'Pasangkan setiap bagian sistem tubuh di kiri dengan keterangan fungsinya di kanan!',
+            pairs: [
+              { id: 'm1', left: '1. Sendi', right: 'Penghubung antartulang yang memungkinkan terjadinya gerak' },
+              { id: 'm2', left: '2. Jaringan saraf', right: 'Mengirim dan menerima sinyal rangsang ke dan dari otak' },
+              { id: 'm3', left: '3. Gangguan tulang belakang & otot', right: 'Dapat dipicu kebiasaan membawa beban berat sebelah atau membungkuk' }
+            ],
+            explanation: 'Hebat! Sendi menghubungkan tulang, jaringan saraf menghantarkan sinyal, dan beban tidak seimbang memicu gangguan tulang belakang.'
+          },
+          {
+            akmRef: 'AKM Soal 21 • Tantangan Isian Cepat',
+            type: 'fill',
+            prompt: 'Organ pusat sistem saraf yang menerima sinyal dari indra dan mengatur perintah gerak tubuh saat lomba lari adalah...',
+            answer: 'OTAK',
+            hint: 'Terletak di dalam tulang tengkorak (4 huruf)',
+            letterBank: ['O', 'T', 'A', 'K', 'S', 'E', 'N', 'D'],
+            explanation: 'Tepat! Otak adalah pusat kendali tubuh yang mengolah rangsang dan memerintahkan otot bergerak.'
+          },
+          {
+            akmRef: 'AKM Soal 26 • Misi Kasus Penalaran',
+            type: 'case',
+            prompt: 'Sebagai Kapten Tim Sehat Kelas 6, paket kebiasaan harian mana yang paling tepat kamu terapkan untuk menjaga kekuatan tulang dan postur tubuh?',
+            options: [
+              {
+                title: 'Paket A: Postur Tegak & Gizi Seimbang',
+                desc: 'Duduk tegak saat belajar, memakai tas ransel di kedua bahu secara seimbang, rutin olahraga, serta makan makanan kaya kalsium & vitamin D.',
+                isCorrect: true
+              },
+              {
+                title: 'Paket B: Tas Satu Bahu & Begadang',
+                desc: 'Membawa semua buku berat di satu bahu agar terlihat keren, duduk membungkuk, dan jarang beraktivitas di luar ruangan.',
+                isCorrect: false
+              },
+              {
+                title: 'Paket C: Olahraga Berat Tanpa Pemanasan',
+                desc: 'Langsung berlari sekuat tenaga tanpa pemanasan dan hanya minum minuman bersoda setiap hari.',
+                isCorrect: false
+              }
+            ],
+            explanation: 'Luar biasa! Duduk tegak, beban tas seimbang di dua bahu, olahraga teratur, serta gizi kaya kalsium dan vitamin D menjaga tulang tetap kuat dan lurus.'
+          }
+        ]
+      },
+      {
+        id: 1,
+        bab: 'Bab 2',
+        title: 'Lorong Waktu Nusantara',
+        subtitle: 'Kedatangan Bangsa Asing, Perlawanan & Kemerdekaan',
+        icon: '⛵',
+        badgeName: 'Lencana Pejuang Bangsa',
+        badgeIcon: '🎖️',
+        themeGradient: 'from-amber-400 to-orange-500',
+        cardBg: 'bg-amber-50 border-amber-300',
+        accentText: 'text-amber-800',
+        btnColor: 'bg-amber-500 hover:bg-amber-400 border-amber-700',
+        stimulusTitle: 'Stimulus 2: Jejak Rempah, Perlawanan & Kemerdekaan',
+        stimulusHTML: `
+          <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 space-y-2.5">
+            <p>⛵ <strong>Daya Tarik Rempah Nusantara:</strong> Sejak abad ke-15, bangsa-bangsa Eropa (Portugis, Spanyol, Belanda) berlayar mencari rempah-rempah seperti <strong>cengkih, pala, dan lada</strong>. Lama-kelamaan, tujuan berdagang berubah menjadi penguasaan wilayah dan monopoli.</p>
+            <p>⚔️ <strong>Dari Kedaerahan ke Nasional:</strong> Perlawanan muncul di Maluku, Jawa (Perang Diponegoro), dan Kalimantan (Perang Banjar). Awalnya perjuangan bersifat <strong>kedaerahan</strong> dan bergantung pada pemimpin lokal sehingga mudah dipecah belah. Pada abad ke-20, muncul <strong>organisasi modern</strong> yang menumbuhkan kesadaran kebangsaan.</p>
+            <p>🇮🇩 <strong>Proklamasi Kemerdekaan:</strong> Puncaknya, pada <strong>17 Agustus 1945</strong>, teks Proklamasi dibacakan di Jakarta setelah melewati peristiwa penting seperti peristiwa Rengasdengklok dan perumusan naskah proklamasi.</p>
+          </div>
+        `,
+        missions: [
+          {
+            akmRef: 'AKM Soal 5 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Komoditas utama yang mendorong bangsa-bangsa Eropa berlayar ke Nusantara sejak abad ke-15 adalah...',
+            options: [
+              'Gandum, wol, dan batu bara',
+              'Cengkih, pala, dan lada',
+              'Karet, timah, dan bauksit',
+              'Teh, kopi, dan tembakau'
+            ],
+            answer: 1,
+            explanation: 'Cengkih, pala, dan lada adalah rempah-rempah bernilai tinggi yang menjadi daya tarik utama bangsa Eropa datang ke Nusantara.'
+          },
+          {
+            akmRef: 'AKM Soal 6 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Perbedaan utama antara perlawanan awal di berbagai daerah dan perjuangan pada abad ke-20 adalah...',
+            options: [
+              'Perlawanan awal sudah terkoordinasi secara nasional, sedangkan abad ke-20 hanya mengandalkan senjata tradisional',
+              'Perlawanan awal bersifat kedaerahan dan bergantung pada pemimpin setempat, sedangkan abad ke-20 berkembang melalui organisasi modern berkesadaran kebangsaan',
+              'Perlawanan awal dilakukan setelah proklamasi, sedangkan abad ke-20 terjadi sebelum bangsa Eropa datang',
+              'Perlawanan awal tidak melibatkan rakyat daerah, sedangkan abad ke-20 hanya dilakukan oleh pedagang asing'
+            ],
+            answer: 1,
+            explanation: 'Perlawanan awal masih terpisah per daerah dan terpusat pada tokoh lokal, sedangkan abad ke-20 bersatu lewat organisasi modern.'
+          },
+          {
+            akmRef: 'AKM Soal 7 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Mengapa peristiwa penting menjelang 17 Agustus 1945 (seperti Rengasdengklok dan perumusan naskah proklamasi) sangat menentukan bagi bangsa Indonesia?',
+            options: [
+              'Karena menjadi kesepakatan untuk menunda kemerdekaan hingga sepuluh tahun berikutnya',
+              'Karena menyatukan langkah tokoh bangsa untuk segera memproklamasikan kemerdekaan Indonesia',
+              'Karena memindahkan pusat perdagangan rempah-rempah ke luar negeri',
+              'Karena menghapuskan seluruh organisasi pergerakan sebelum tahun 1945'
+            ],
+            answer: 1,
+            explanation: 'Rangkaian peristiwa menjelang 17 Agustus 1945 menyatukan tekad golongan tua dan muda untuk segera memproklamasikan kemerdekaan.'
+          },
+          {
+            akmRef: 'AKM Soal 17 • Papan Benar / Salah',
+            type: 'pgk_tf',
+            prompt: 'Periksa fakta sejarah di Lorong Waktu! Tentukan apakah setiap pernyataan berikut BENAR atau SALAH:',
+            statements: [
+              { text: 'Bangsa-bangsa Eropa datang ke Nusantara sejak abad ke-15 untuk mencari rempah-rempah.', isTrue: true },
+              { text: 'Semua perlawanan kedaerahan sejak awal sudah bersatu dalam satu organisasi nasional modern.', isTrue: false },
+              { text: 'Proklamasi Kemerdekaan Indonesia dibacakan pada 17 Agustus 1945 di Jakarta.', isTrue: true }
+            ],
+            explanation: 'Pernyataan 1 dan 3 Benar. Pernyataan 2 Salah karena organisasi modern baru berkembang pada abad ke-20.'
+          },
+          {
+            akmRef: 'AKM Soal 22 • Tantangan Isian Cepat',
+            type: 'fill',
+            prompt: 'Proklamasi Kemerdekaan Indonesia dikumandangkan di Jakarta pada tanggal...',
+            answer: '17 AGUSTUS 1945',
+            hint: 'Format: Tanggal Bulan Tahun (contoh: 17 AGUSTUS 1945)',
+            quickChoices: ['17 AGUSTUS 1945', '28 OKTOBER 1928', '10 NOVEMBER 1945', '1 JUNI 1945'],
+            explanation: 'Benar! Pada 17 Agustus 1945, Ir. Soekarno didampingi Drs. Moh. Hatta membacakan teks Proklamasi Kemerdekaan Indonesia.'
+          },
+          {
+            akmRef: 'AKM Soal 25 • Tantangan Isian Cepat',
+            type: 'fill',
+            prompt: 'Perlawanan rakyat di berbagai daerah pada masa awal mudah dipecah belah penjajah karena perjuangannya masih bersifat...',
+            answer: 'KEDAERAHAN',
+            hint: 'Berarti hanya berjuang di wilayahnya masing-masing (10 huruf)',
+            letterBank: ['K', 'E', 'D', 'A', 'E', 'R', 'A', 'H', 'A', 'N', 'S', 'I'],
+            explanation: 'Tepat! Sifat kedaerahan membuat perjuangan belum terkoordinasi secara menyeluruh se-Nusantara.'
+          },
+          {
+            akmRef: 'AKM Soal 27 • Misi Kasus Penalaran',
+            type: 'case',
+            prompt: 'Mengapa strategi perjuangan melalui organisasi modern pada abad ke-20 jauh lebih kuat mengantarkan Indonesia menuju kemerdekaan dibanding perlawanan lama?',
+            options: [
+              {
+                title: 'Persatuan Lintas Daerah & Visi Kebangsaan',
+                desc: 'Organisasi modern menyatukan pelajar dan rakyat dari berbagai daerah dengan tujuan bersama (Indonesia merdeka), sehingga tidak berhenti meski satu pemimpin ditangkap.',
+                isCorrect: true
+              },
+              {
+                title: 'Mengandalkan Satu Pemimpin Tunggal Saja',
+                desc: 'Organisasi modern hanya berfokus pada satu kerajaan lokal tanpa berkomunikasi dengan daerah lain.',
+                isCorrect: false
+              },
+              {
+                title: 'Menyerahkan Keputusan ke Bangsa Asing',
+                desc: 'Organisasi modern menunggu belas kasihan penjajah tanpa membangun kesadaran rakyat.',
+                isCorrect: false
+              }
+            ],
+            explanation: 'Analisis yang tajam! Kesadaran kebangsaan dan struktur organisasi membuat perjuangan tetap hidup dan terkoordinasi hingga Proklamasi 1945.'
+          }
+        ]
+      },
+      {
+        id: 2,
+        bab: 'Bab 3',
+        title: 'Ekspedisi Enam Benua',
+        subtitle: 'Benua Dunia, Kondisi Geografis & Potensi Berkelanjutan',
+        icon: '🌍',
+        badgeName: 'Lencana Navigator Bumi',
+        badgeIcon: '🧭',
+        themeGradient: 'from-sky-400 to-blue-600',
+        cardBg: 'bg-sky-50 border-sky-300',
+        accentText: 'text-sky-800',
+        btnColor: 'bg-sky-500 hover:bg-sky-400 border-sky-700',
+        stimulusTitle: 'Stimulus 3: Menjelajah Benua & Potensi Geografis',
+        stimulusHTML: `
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 space-y-3">
+            <p>🌐 <strong>Enam Benua Dunia:</strong> Asia, Afrika, Amerika Utara, Amerika Selatan, Eropa, dan Antarktika (serta kawasan Australia/Oseania) memiliki bentang alam dan iklim berbeda.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs sm:text-sm">
+              <div class="bg-white p-2.5 rounded-xl border border-sky-200">
+                <div class="font-bold text-emerald-700">⛰️ Wilayah A (Dataran Tinggi)</div>
+                <p class="mt-1">Suhu sejuk, curah hujan cukup, tanah vulkanik subur → <strong>Pertanian sayur, teh, & ekowisata perbukitan</strong>.</p>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-sky-200">
+                <div class="font-bold text-blue-700">🏖️ Wilayah B (Pesisir & Laut)</div>
+                <p class="mt-1">Garis pantai panjang, arus kaya ikan, angin stabil → <strong>Perikanan tangkap, rumput laut, & wisata bahari</strong>.</p>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-sky-200">
+                <div class="font-bold text-indigo-700">🌲 Wilayah C (Iklim Subpolar)</div>
+                <p class="mt-1">Musim dingin panjang, hutan konifer luas → <strong>Kehutanan berkelanjutan, energi angin, & wisata musim dingin</strong>.</p>
+              </div>
+            </div>
+          </div>
+        `,
+        missions: [
+          {
+            akmRef: 'AKM Soal 8 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Berdasarkan peta pembagian benua dunia, benua manakah yang memiliki wilayah daratan paling luas dengan keragaman negara dan bentang alam yang sangat besar?',
+            options: [
+              'Benua Asia',
+              'Benua Eropa',
+              'Benua Antarktika',
+              'Benua Amerika Selatan'
+            ],
+            answer: 0,
+            explanation: 'Benua Asia adalah benua terluas di dunia (tempat Indonesia berada) dengan keragaman iklim, budaya, dan bentang alam yang luar biasa.'
+          },
+          {
+            akmRef: 'AKM Soal 9 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Berdasarkan catatan Ekspedisi Enam Benua, perbedaan utama antara Wilayah A dan Wilayah B terletak pada...',
+            options: [
+              'Wilayah A memiliki garis pantai panjang untuk rumput laut, sedangkan Wilayah B bersuhu dingin bersalju sepanjang tahun',
+              'Wilayah A berada di dataran tinggi beriklim sejuk dengan tanah vulkanik subur, sedangkan Wilayah B berada di pesisir dengan laut luas',
+              'Wilayah A tidak memiliki curah hujan, sedangkan Wilayah B berada di puncak pegunungan es',
+              'Wilayah A hanya cocok untuk energi angin, sedangkan Wilayah B hanya memiliki hutan konifer'
+            ],
+            answer: 1,
+            explanation: 'Wilayah A merupakan dataran tinggi subur beriklim sejuk, sedangkan Wilayah B berada di kawasan pesisir dengan potensi kelautan.'
+          },
+          {
+            akmRef: 'AKM Soal 10 • Pilihan Ganda (Penalaran)',
+            type: 'pg',
+            prompt: 'Sebuah desa di Wilayah B (pesisir dan laut luas) ingin meningkatkan pendapatan warga tanpa merusak lingkungan laut. Langkah paling tepat adalah...',
+            options: [
+              'Menangkap ikan menggunakan bahan peledak agar hasil tangkapan melimpah dalam satu hari',
+              'Menebang seluruh hutan bakau di pantai untuk memperluas lahan tambak tanpa batas',
+              'Mengembangkan perikanan ramah lingkungan, budidaya rumput laut, dan ekowisata bahari dengan menjaga kelestarian pesisir',
+              'Membuang limbah rumah tangga langsung ke laut agar ikan cepat besar'
+            ],
+            answer: 2,
+            explanation: 'Perikanan ramah lingkungan, budidaya rumput laut, dan ekowisata bahari meningkatkan ekonomi sekaligus menjaga ekosistem laut tetap lestari.'
+          },
+          {
+            akmRef: 'AKM Soal 11 • Pilihan Ganda (Penalaran)',
+            type: 'pg',
+            prompt: 'Jika suatu negara hanya bergantung pada satu jenis sumber daya alam tanpa mengembangkan sektor lain, prediksi dampak jangka panjang yang paling mungkin terjadi adalah...',
+            options: [
+              'Perekonomian negara akan selalu stabil tanpa dipengaruhi perubahan harga atau cadangan sumber daya',
+              'Negara menjadi rentan guncangan ekonomi ketika harga komoditas turun atau cadangan sumber daya menipis',
+              'Kebutuhan seluruh barang industri akan terpenuhi sendiri tanpa kerja sama dengan negara lain',
+              'Kondisi iklim negara tersebut akan berubah menjadi tropis sepanjang tahun'
+            ],
+            answer: 1,
+            explanation: 'Mengandalkan satu komoditas saja berisiko tinggi karena ekonomi negara akan terguncang saat harga pasar jatuh atau cadangan habis.'
+          },
+          {
+            akmRef: 'AKM Soal 23 • Tantangan Isian Cepat',
+            type: 'fill',
+            prompt: 'Jenis usaha yang sesuai dikembangkan di Wilayah A yang bersuhu sejuk dan bertanah vulkanik subur adalah pertanian sayur, teh, dan...',
+            answer: 'EKOWISATA PERBUKITAN',
+            hint: 'Wisata alam ramah lingkungan di daerah bukit',
+            quickChoices: ['EKOWISATA PERBUKITAN', 'WISATA BAHARI', 'PENAMBANGAN BATU BARA', 'PELABUHAN KONTAINER'],
+            explanation: 'Tepat! Suhu sejuk dan pemandangan bukit yang asri sangat cocok untuk ekowisata perbukitan.'
+          },
+          {
+            akmRef: 'AKM Soal 28 • Misi Simulasi Kepala Daerah',
+            type: 'case',
+            prompt: 'Kamu terpilih menjadi Kepala Daerah di Wilayah A (Dataran Tinggi & Tanah Vulkanik Subur). Kebijakan mana yang kamu pilih agar ekonomi warga maju tanpa merusak alam?',
+            options: [
+              {
+                title: 'Pertanian Terasering & Ekowisata Hijau',
+                desc: 'Mengembangkan pertanian sayur/teh dengan sistem terasering pencegah longsor, pupuk organik, serta ekowisata edukasi yang menjaga kelestarian hutan.',
+                isCorrect: true
+              },
+              {
+                title: 'Membabat Semua Hutan Lereng Bukit',
+                desc: 'Menebang seluruh pohon penahan tanah di lereng curam untuk membangun beton vila besar-besaran.',
+                isCorrect: false
+              },
+              {
+                title: 'Pestisida Kimia Berlebihan',
+                desc: 'Menggunakan bahan kimia dosis tinggi terus-menerus hingga mencemari sungai di bawah bukit.',
+                isCorrect: false
+              }
+            ],
+            explanation: 'Keputusan kepala daerah yang bijak! Terasering dan ekowisata hijau menjaga kesuburan tanah vulkanik sekaligus menyejahterakan petani.'
+          }
+        ]
+      },
+      {
+        id: 3,
+        bab: 'Bab 4',
+        title: 'Paviliun Diplomasi & Budaya',
+        subtitle: 'Kerja Sama Internasional & Warisan Budaya Mendunia',
+        icon: '🎭',
+        badgeName: 'Lencana Duta Nusantara',
+        badgeIcon: '🏆',
+        themeGradient: 'from-purple-500 to-pink-500',
+        cardBg: 'bg-purple-50 border-purple-300',
+        accentText: 'text-purple-800',
+        btnColor: 'bg-purple-500 hover:bg-purple-400 border-purple-700',
+        stimulusTitle: 'Stimulus 4: Diplomasi Global & Warisan Budaya Nusantara',
+        stimulusHTML: `
+          <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 space-y-2.5">
+            <p>🤝 <strong>Kerja Sama Internasional:</strong> Indonesia aktif menjalin kerja sama melalui organisasi regional dan global seperti <strong>ASEAN</strong> dan <strong>Perserikatan Bangsa-Bangsa (PBB)</strong>. Bidangnya meliputi pertukaran pelajar, perdagangan komoditas, penanganan bencana, hingga transisi energi bersih agar negara saling melengkapi kebutuhan.</p>
+            <p>🎨 <strong>Warisan Budaya Mendunia:</strong> Kekayaan budaya Indonesia seperti <strong>batik, pencak silat, gamelan, angklung, dan wayang</strong> dikenal luas di mancanegara. Melestarikannya menjaga identitas bangsa sekaligus memperkuat daya tarik Indonesia di mata dunia.</p>
+          </div>
+        `,
+        missions: [
+          {
+            akmRef: 'AKM Soal 12 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Bidang kerja sama yang dilakukan Indonesia bersama negara-negara lain antara lain adalah...',
+            options: [
+              'Pertukaran pelajar, perdagangan komoditas, penanganan bencana, dan transisi energi bersih',
+              'Penutupan seluruh perbatasan dan penghentian hubungan diplomatik',
+              'Larangan kunjungan wisatawan dan pertukaran budaya',
+              'Pengalihan seluruh kekayaan alam kepada satu negara tetangga'
+            ],
+            answer: 0,
+            explanation: 'Indonesia bekerja sama di bidang pendidikan (pertukaran pelajar), ekonomi, penanggulangan bencana, dan energi bersih.'
+          },
+          {
+            akmRef: 'AKM Soal 13 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Mengapa kerja sama antarnegara bermanfaat bagi setiap negara yang terlibat?',
+            options: [
+              'Karena membuat setiap negara tidak perlu lagi bekerja keras di dalam negeri',
+              'Karena membantu saling melengkapi kebutuhan yang tidak dapat dipenuhi sendiri serta memperkuat hubungan antarbangsa',
+              'Karena menyeragamkan seluruh bahasa dan adat istiadat di semua negara',
+              'Karena menghilangkan perbedaan kondisi geografis di seluruh dunia'
+            ],
+            answer: 1,
+            explanation: 'Setiap negara punya keterbatasan sumber daya atau teknologi, sehingga kerja sama membantu saling melengkapi kebutuhan.'
+          },
+          {
+            akmRef: 'AKM Soal 14 • Pilihan Ganda',
+            type: 'pg',
+            prompt: 'Contoh kekayaan dan warisan budaya Indonesia yang dikenal luas di mancanegara adalah...',
+            options: [
+              'Batik, pencak silat, gamelan, angklung, dan wayang',
+              'Menara Eiffel, kincir angin, dan piramida',
+              'Tari balet klasik Eropa dan opera Italia',
+              'Kereta cepat shinkansen dan jembatan gantung'
+            ],
+            answer: 0,
+            explanation: 'Batik, pencak silat, gamelan, angklung, dan wayang merupakan warisan budaya Indonesia yang telah diakui dan dikagumi dunia.'
+          },
+          {
+            akmRef: 'AKM Soal 15 • Pilihan Ganda (Penalaran)',
+            type: 'pg',
+            prompt: 'Kesimpulan yang paling tepat mengenai hubungan antara pelestarian warisan budaya dan posisi Indonesia di dunia adalah...',
+            options: [
+              'Warisan budaya hanya berguna untuk pertunjukan lokal dan tidak memengaruhi citra bangsa di luar negeri',
+              'Melestarikan warisan budaya menjaga identitas bangsa sekaligus meningkatkan ketertarikan dan penghargaan masyarakat dunia terhadap Indonesia',
+              'Warisan budaya harus diganti dengan budaya asing agar mudah diterima negara lain',
+              'Pelestarian budaya hanya menjadi tanggung jawab wisatawan mancanegara'
+            ],
+            answer: 1,
+            explanation: 'Budaya yang lestari membuat Indonesia memiliki jati diri kuat sekaligus dihormati oleh masyarakat internasional.'
+          },
+          {
+            akmRef: 'AKM Soal 18 • Pilihan Ganda Kompleks',
+            type: 'pgk_check',
+            prompt: 'Pilih DUA pernyataan yang paling tepat mengenai kondisi geografis, kerja sama global, dan warisan budaya!',
+            items: [
+              'Kondisi geografis memengaruhi jenis mata pencaharian dan pemanfaatan potensi suatu daerah.',
+              'Kerja sama antarnegara hanya bermanfaat jika seluruh negara memiliki sumber daya alam yang identik.',
+              'Kesenian tradisional seperti gamelan dan angklung menjadi bagian dari kekayaan budaya yang dikenal di mancanegara.',
+              'Wilayah pesisir dengan laut luas paling sesuai untuk pertanian sayur dataran tinggi beriklim sejuk.'
+            ],
+            correctIndices: [0, 2],
+            explanation: 'Pernyataan 1 dan 3 tepat! Justru perbedaan sumber daya membuat kerja sama antarnegara saling melengkapi.'
+          },
+          {
+            akmRef: 'AKM Soal 20 • Mini-Game Menjodohkan',
+            type: 'match',
+            prompt: 'Pasangkan setiap konsep di kolom kiri dengan contoh atau deskripsi yang tepat di kolom kanan!',
+            pairs: [
+              { id: 'c1', left: '1. Peristiwa sekitar kemerdekaan', right: 'Peristiwa Rengasdengklok dan perumusan naskah menjelang 17 Agustus 1945' },
+              { id: 'c2', left: '2. Kerja sama internasional', right: 'ASEAN dan PBB sebagai wadah kerja sama antarnegara' },
+              { id: 'c3', left: '3. Warisan budaya Indonesia', right: 'Batik, pencak silat, dan wayang yang dikenal luas di dunia' }
+            ],
+            explanation: 'Sempurna! Kamu berhasil menghubungkan jejak sejarah kemerdekaan, diplomasi global, dan budaya Nusantara.'
+          },
+          {
+            akmRef: 'AKM Soal 24 • Tantangan Isian Cepat',
+            type: 'fill',
+            prompt: 'Salah satu organisasi internasional terbesar di dunia tempat Indonesia menjalin kerja sama antarnegara selain ASEAN adalah...',
+            answer: 'PBB',
+            hint: 'Singkatan dari Perserikatan Bangsa-Bangsa (3 huruf)',
+            letterBank: ['P', 'B', 'B', 'A', 'S', 'E', 'N', 'W'],
+            explanation: 'Benar! PBB (Perserikatan Bangsa-Bangsa) adalah organisasi internasional tempat Indonesia berperan aktif menjaga perdamaian dan kerja sama.'
+          },
+          {
+            akmRef: 'AKM Soal 29 & 30 • Misi Duta Budaya & Diplomasi',
+            type: 'case',
+            prompt: 'Sebagai Duta Budaya Kelas 6 SD, aksi nyata mana yang paling berdampak untuk melestarikan budaya lokal sekaligus bijak dalam kerja sama global?',
+            options: [
+              {
+                title: 'Aktif Berlatih Seni Tradisi & Promosi Kreatif',
+                desc: 'Ikut ekstrakurikuler gamelan/angklung/pencak silat/membatik, bangga memakai produk lokal, dan membuat pameran kelas edukatif untuk memperkenalkan budaya daerah.',
+                isCorrect: true
+              },
+              {
+                title: 'Malu Mempelajari Budaya Daerah Sendiri',
+                desc: 'Menganggap kesenian tradisi sudah ketinggalan zaman dan hanya meniru seluruh gaya hidup asing tanpa menyaringnya.',
+                isCorrect: false
+              },
+              {
+                title: 'Menutup Diri dari Pertukaran Pelajar',
+                desc: 'Menolak berkenalan dengan teman dari negara lain sehingga tidak ada pertukaran ilmu dan budaya.',
+                isCorrect: false
+              }
+            ],
+            explanation: 'Hebat, Duta Nusantara! Berlatih seni tradisi dan bangga mempromosikannya menjaga warisan bangsa tetap hidup di panggung dunia.'
+          }
+        ]
+      }
+    ];
+
+    /* =========================================================================
+       4. APPLICATION STATE
+       ========================================================================= */
+    const state = {
+      screen: 'welcome', // 'welcome' | 'map' | 'mission' | 'certificate'
+      playerName: '',
+      avatarId: 'sains',
+      xp: 0,
+      hearts: 5,
+      maxHearts: 5,
+      streak: 0,
+      bestStreak: 0,
+      currentZoneId: 0,
+      currentMissionIdx: 0,
+      // Track completion per zone: { completed: bool, score: number, total: number, results: [] }
+      zoneProgress: ZONES.map((z) => ({
+        completed: false,
+        correctCount: 0,
+        totalMissions: z.missions.length,
+        xpEarned: 0
+      })),
+      // Interactive state for current question
+      answered: false,
+      isCurrentCorrect: false,
+      pgSelected: null,
+      pgkChecked: [],
+      tfAnswers: {},
+      matchSelectedLeft: null,
+      matchPairsDone: {}, // { leftId: rightIndex }
+      matchShuffledRight: [],
+      fillInput: '',
+      caseSelected: null
+    };
+
+    /* =========================================================================
+       5. HELPER FUNCTIONS
+       ========================================================================= */
+    function getAvatar() {
+      return AVATARS.find((a) => a.id === state.avatarId) || AVATARS[0];
+    }
+
+    function showToast(msg, icon = '💡') {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-msg').textContent = msg;
+      document.getElementById('toast-icon').textContent = icon;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 2600);
+    }
+
+    function updateHUD() {
+      const hud = document.getElementById('hud-bar');
+      if (state.screen === 'welcome') {
+        hud.classList.add('hidden');
+        return;
+      }
+      hud.classList.remove('hidden');
+      const av = getAvatar();
+      document.getElementById('hud-avatar').textContent = av.emoji;
+      document.getElementById('hud-name').textContent = state.playerName || 'Petualang Cilik';
+      document.getElementById('hud-role').textContent = av.role;
+
+      // Hearts display
+      let heartsStr = '';
+      for (let i = 0; i < state.maxHearts; i++) {
+        heartsStr += i < state.hearts ? '❤️' : '🤍';
+      }
+      document.getElementById('hud-hearts').textContent = heartsStr;
+
+      // Streak & XP
+      document.getElementById('hud-streak').textContent = state.streak;
+      document.getElementById('hud-xp').textContent = `${state.xp} XP`;
+
+      // Mini Badges in HUD
+      const badgesContainer = document.getElementById('hud-badges');
+      badgesContainer.innerHTML = ZONES.map((z, idx) => {
+        const unlocked = state.zoneProgress[idx].completed;
+        return `<span class="text-xs px-1.5 py-0.5 rounded-md border ${
+          unlocked
+            ? 'bg-amber-100 border-amber-400 text-amber-800 shadow-sm'
+            : 'bg-slate-100 border-slate-200 text-slate-400 grayscale opacity-60'
+        }" title="${z.badgeName}">${z.badgeIcon}</span>`;
+      }).join('');
+
+      // Back to Map button visibility
+      const btnMap = document.getElementById('btn-back-map');
+      if (state.screen === 'mission') {
+        btnMap.classList.remove('hidden');
+      } else {
+        btnMap.classList.add('hidden');
+      }
+    }
+
+    function openStimulusModal(zoneId) {
+      SoundFX.click();
+      const zone = ZONES[zoneId];
+      document.getElementById('modal-title').textContent = zone.stimulusTitle;
+      document.getElementById('modal-body').innerHTML = zone.stimulusHTML;
+      document.getElementById('stimulus-modal').classList.remove('hidden');
+    }
+
+    function closeStimulusModal() {
+      SoundFX.click();
+      document.getElementById('stimulus-modal').classList.add('hidden');
+    }
+
+    function triggerBurstFromCenter() {
+      ParticleFX.burst(window.innerWidth / 2, window.innerHeight * 0.42, 34);
+    }
+
+    /* =========================================================================
+       6. SCREEN NAVIGATION & RENDERERS
+       ========================================================================= */
+    function render() {
+      updateHUD();
+      const root = document.getElementById('app-root');
+      if (state.screen === 'welcome') {
+        root.innerHTML = renderWelcomeScreen();
+      } else if (state.screen === 'map') {
+        root.innerHTML = renderMapScreen();
+      } else if (state.screen === 'mission') {
+        root.innerHTML = renderMissionScreen();
+      } else if (state.screen === 'certificate') {
+        root.innerHTML = renderCertificateScreen();
+      }
+    }
+
+    /* --- SCREEN 1: WELCOME --- */
+    function renderWelcomeScreen() {
+      return `
+        <div class="min-h-[86vh] flex flex-col items-center justify-center py-4">
+          <div class="card-adventure w-full max-w-2xl p-6 sm:p-8 text-center animate-pop">
+            <!-- Hero Emblem -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 border-2 border-amber-300 text-amber-800 font-display font-bold text-xs sm:text-sm mb-3">
+              <span>✨</span> GAME EDUKASI AKM IPAS KELAS 6 SD <span>✨</span>
+            </div>
+
+            <div class="text-5xl sm:text-6xl mb-2 animate-float-slow">🏝️🧭🚀</div>
+
+            <h1 class="font-display font-bold text-2xl sm:text-4xl text-sky-900 leading-tight">
+              Petualangan Jelajah IPAS Kelas 6
+            </h1>
+            <p class="font-display font-semibold text-base sm:text-xl text-amber-600 mt-1">
+              Misi Penjaga Nusantara & Dunia
+            </p>
+            <p class="text-slate-600 text-sm sm:text-base mt-2 max-w-lg mx-auto">
+              Jelajahi 4 pulau petualangan, pecahkan teka-teki sains, sejarah kemerdekaan, geografi benua, hingga budaya Nusantara untuk mengumpulkan 4 Lencana Emas!
+            </p>
+
+            <!-- Player Name Input -->
+            <div class="mt-6 text-left max-w-md mx-auto">
+              <label for="input-player-name" class="block font-display font-bold text-slate-700 text-sm sm:text-base mb-1.5">
+                1. Siapa Nama Petualang Cilikmu?
+              </label>
+              <input
+                id="input-player-name"
+                type="text"
+                maxlength="24"
+                value="${state.playerName}"
+                oninput="state.playerName = this.value"
+                onkeydown="if(event.key==='Enter') startExpedition()"
+                placeholder="Ketik namamu di sini... (contoh: Raka)"
+                class="w-full px-4 py-3 rounded-2xl border-2 border-sky-300 focus:border-sky-500 focus:outline-none font-bold text-slate-800 text-base bg-sky-50/70 placeholder:font-normal"
+              />
+            </div>
+
+            <!-- Avatar Selection -->
+            <div class="mt-5 text-left max-w-xl mx-auto">
+              <p class="font-display font-bold text-slate-700 text-sm sm:text-base mb-2">
+                2. Pilih Karakter Penjelajahmu:
+              </p>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                ${AVATARS.map((av) => {
+                  const selected = state.avatarId === av.id;
+                  return `
+                    <button
+                      type="button"
+                      onclick="selectAvatar('${av.id}')"
+                      class="p-3 rounded-2xl border-2 text-center transition-all ${
+                        selected
+                          ? av.color + ' scale-105 shadow-md ring-2 ring-amber-400'
+                          : 'bg-white border-slate-200 hover:border-sky-300 text-slate-700'
+                      }"
+                    >
+                      <div class="text-3xl sm:text-4xl mb-1">${av.emoji}</div>
+                      <div class="font-display font-bold text-xs sm:text-sm leading-tight">${av.role}</div>
+                      <div class="text-[11px] opacity-80 mt-0.5 leading-snug">${av.desc}</div>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Start Button -->
+            <div class="mt-7">
+              <button
+                type="button"
+                onclick="startExpedition()"
+                class="btn-3d animate-pulse-glow w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-emerald-700 font-display font-bold text-lg sm:text-xl shadow-lg flex items-center justify-center gap-2 mx-auto"
+              >
+                <span>Mulai Ekspedisi</span>
+                <span>🚀</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectAvatar(id) {
+      SoundFX.click();
+      state.avatarId = id;
+      render();
+    }
+
+    function startExpedition() {
+      SoundFX.init();
+      const inputEl = document.getElementById('input-player-name');
+      const rawName = inputEl ? inputEl.value.trim() : state.playerName.trim();
+      if (!rawName) {
+        SoundFX.wrong();
+        showToast('Yuk tulis nama petualangmu terlebih dahulu!', '✏️');
+        if (inputEl) inputEl.focus();
+        return;
+      }
+      state.playerName = rawName;
+      SoundFX.correct();
+      triggerBurstFromCenter();
+      state.screen = 'map';
+      render();
+    }
+
+    /* --- SCREEN 2: INTERACTIVE EXPLORATION MAP --- */
+    function renderMapScreen() {
+      const completedCount = state.zoneProgress.filter((z) => z.completed).length;
+      const allCompleted = completedCount === ZONES.length;
+
+      return `
+        <div class="space-y-5 animate-pop">
+          <!-- Map Banner -->
+          <div class="card-adventure p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-sky-100 text-sky-800 font-bold text-xs mb-1">
+                🗺️ PETA EKSPLORASI NUSANTARA & DUNIA
+              </span>
+              <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-800">
+                Selamat Datang, <span class="text-sky-600">${state.playerName}</span>!
+              </h2>
+              <p class="text-slate-600 text-sm mt-0.5">
+                Pilih pulau misi untuk dijelajahi. Kumpulkan keempat Lencana Emas untuk meraih Sertifikat Penjaga Nusantara!
+              </p>
+            </div>
+
+            <!-- Overall Progress Pill -->
+            <div class="flex flex-col items-center sm:items-end shrink-0 bg-amber-50 border-2 border-amber-200 px-4 py-2.5 rounded-2xl">
+              <div class="font-display font-bold text-amber-800 text-sm">
+                Lencana Terkumpul: ${completedCount} / 4
+              </div>
+              <div class="w-36 h-3 bg-amber-200/70 rounded-full overflow-hidden mt-1.5">
+                <div class="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-500" style="width: ${(completedCount / 4) * 100}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Island Zones Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            ${ZONES.map((zone, idx) => {
+              const prog = state.zoneProgress[idx];
+              return `
+                <div class="island-card card-adventure overflow-hidden flex flex-col justify-between border-2 ${zone.cardBg}">
+                  <!-- Island Top Visual Header -->
+                  <div class="bg-gradient-to-r ${zone.themeGradient} p-4 text-white flex items-center justify-between relative overflow-hidden">
+                    <div class="z-10">
+                      <span class="text-xs font-extrabold uppercase tracking-wider bg-black/20 px-2.5 py-0.5 rounded-full">
+                        Zona ${idx + 1} • ${zone.bab}
+                      </span>
+                      <h3 class="font-display font-bold text-lg sm:text-xl mt-1 leading-snug">
+                        ${zone.title}
+                      </h3>
+                    </div>
+                    <div class="text-5xl animate-float-med z-10 drop-shadow">
+                      ${zone.icon}
+                    </div>
+                  </div>
+
+                  <!-- Island Body -->
+                  <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
+                    <div>
+                      <p class="text-slate-700 font-semibold text-sm">${zone.subtitle}</p>
+                      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs font-bold">
+                        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-600">
+                          🎯 ${zone.missions.length} Tantangan Misi
+                        </span>
+                        <span class="px-2.5 py-1 rounded-lg ${
+                          prog.completed
+                            ? 'bg-amber-100 border border-amber-300 text-amber-800'
+                            : 'bg-slate-100 border border-slate-200 text-slate-500'
+                        }">
+                          ${zone.badgeIcon} ${prog.completed ? zone.badgeName + ' (Diraih!)' : 'Hadiah: ' + zone.badgeName}
+                        </span>
+                      </div>
+                      ${
+                        prog.completed
+                          ? `<p class="text-xs font-bold text-emerald-700 mt-2">✅ Selesai! Skor Zona: ${prog.correctCount}/${prog.totalMissions} benar (+${prog.xpEarned} XP)</p>`
+                          : ''
+                      }
+                    </div>
+
+                    <!-- Island Action Buttons -->
+                    <div class="flex items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onclick="openStimulusModal(${idx})"
+                        class="btn-3d bg-white hover:bg-slate-50 text-slate-700 border-slate-300 font-display font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-xl flex items-center gap-1.5"
+                      >
+                        <span>📖</span> Panduan
+                      </button>
+                      <button
+                        type="button"
+                        onclick="enterZone(${idx})"
+                        class="btn-3d flex-1 ${zone.btnColor} text-white font-display font-bold text-sm sm:text-base px-4 py-2.5 rounded-xl flex items-center justify-center gap-2"
+                      >
+                        <span>${prog.completed ? 'Jelajahi Ulang' : 'Masuk Zona'}</span>
+                        <span>▶</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Certificate CTA Banner -->
+          <div class="card-adventure p-4 sm:p-5 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="text-4xl">🏆</div>
+              <div>
+                <h4 class="font-display font-bold text-base sm:text-lg text-amber-900">
+                  ${allCompleted ? 'Semua Lencana Berhasil Dikumpulkan!' : 'Sertifikat Akhir Petualang'}
+                </h4>
+                <p class="text-xs sm:text-sm text-amber-800/80">
+                  ${
+                    allCompleted
+                      ? 'Luar biasa! Kamu siap melihat rapor capaian dan mencetak Sertifikat Penjaga Nusantara.'
+                      : 'Selesaikan minimal 1 zona (atau seluruh 4 zona) untuk melihat rekap skor & sertifikat petualangmu.'
+                  }
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onclick="openCertificate()"
+              class="btn-3d w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-white border-amber-700 font-display font-bold text-sm sm:text-base shrink-0"
+            >
+              🎓 Lihat Sertifikat
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function goToMap() {
+      SoundFX.click();
+      state.screen = 'map';
+      render();
+    }
+
+    /* --- SCREEN 3: ZONE MISSION ENGINE --- */
+    function enterZone(zoneId) {
+      SoundFX.click();
+      state.currentZoneId = zoneId;
+      state.currentMissionIdx = 0;
+      // Restore hearts if depleted when entering a new zone
+      if (state.hearts <= 0) {
+        state.hearts = state.maxHearts;
+      }
+      // Reset zone score tracking for fresh run
+      state.zoneProgress[zoneId].correctCount = 0;
+      state.zoneProgress[zoneId].xpEarned = 0;
+      prepareMissionState();
+      state.screen = 'mission';
+      render();
+    }
+
+    function prepareMissionState() {
+      const zone = ZONES[state.currentZoneId];
+      const mission = zone.missions[state.currentMissionIdx];
+      state.answered = false;
+      state.isCurrentCorrect = false;
+      state.pgSelected = null;
+      state.pgkChecked = [];
+      state.tfAnswers = {};
+      state.matchSelectedLeft = null;
+      state.matchPairsDone = {};
+      state.fillInput = '';
+      state.caseSelected = null;
+
+      if (mission.type === 'match') {
+        const rightItems = mission.pairs.map((p, idx) => ({ idx, text: p.right }));
+        // Deterministic-safe shuffle
+        for (let i = rightItems.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [rightItems[i], rightItems[j]] = [rightItems[j], rightItems[i]];
+        }
+        state.matchShuffledRight = rightItems;
+      }
+    }
+
+    function renderMissionScreen() {
+      const zone = ZONES[state.currentZoneId];
+      const mission = zone.missions[state.currentMissionIdx];
+      const totalM = zone.missions.length;
+      const progressPct = ((state.currentMissionIdx + (state.answered ? 1 : 0)) / totalM) * 100;
+
+      return `
+        <div class="max-w-3xl mx-auto space-y-4 animate-pop">
+          <!-- Zone Top Bar -->
+          <div class="card-adventure p-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${zone.icon}</span>
+                <div>
+                  <span class="text-xs font-extrabold uppercase tracking-wider ${zone.accentText}">
+                    ${zone.bab} • ${zone.title}
+                  </span>
+                  <div class="font-display font-bold text-slate-800 text-sm sm:text-base">
+                    Tantangan ${state.currentMissionIdx + 1} dari ${totalM}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onclick="openStimulusModal(${zone.id})"
+                class="btn-3d bg-amber-100 hover:bg-amber-200 text-amber-900 border-amber-400 font-display font-bold text-xs sm:text-sm px-3.5 py-2 rounded-xl flex items-center gap-1.5"
+              >
+                <span>📖</span> Baca Kartu Panduan
+              </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden p-0.5">
+              <div class="h-full rounded-full bg-gradient-to-r ${zone.themeGradient} transition-all duration-500" style="width: ${progressPct}%"></div>
+            </div>
+          </div>
+
+          <!-- Mission Question Card -->
+          <div id="mission-card" class="card-adventure p-5 sm:p-7 space-y-5">
+            <div>
+              <span class="inline-block text-xs font-extrabold px-3 py-1 rounded-full bg-sky-100 text-sky-800 mb-2">
+                ${mission.akmRef}
+              </span>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-slate-800 leading-snug">
+                ${mission.prompt}
+              </h3>
+            </div>
+
+            <!-- Dynamic Mini-Game Area -->
+            <div>
+              ${renderMissionInteractiveBody(mission)}
+            </div>
+
+            <!-- Feedback Banner (Shown after answering) -->
+            ${
+              state.answered
+                ? `
+                <div class="p-4 rounded-2xl border-2 animate-pop ${
+                  state.isCurrentCorrect
+                    ? 'bg-emerald-50 border-emerald-400 text-emerald-900'
+                    : 'bg-rose-50 border-rose-400 text-rose-900'
+                }">
+                  <div class="flex items-start gap-3">
+                    <div class="text-3xl">${state.isCurrentCorrect ? '🌟' : '💡'}</div>
+                    <div class="flex-1">
+                      <h4 class="font-display font-bold text-base sm:text-lg">
+                        ${state.isCurrentCorrect ? 'Hebat Sekali! Jawabanmu Tepat! (+20 XP)' : 'Hampir Tepat! Yuk Pelajari Penjelasannya:'}
+                      </h4>
+                      <p class="text-sm mt-1 leading-relaxed">${mission.explanation}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex justify-end pt-1">
+                  <button
+                    type="button"
+                    onclick="nextMission()"
+                    class="btn-3d w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 text-white border-blue-800 font-display font-bold text-base sm:text-lg flex items-center justify-center gap-2"
+                  >
+                    <span>${state.currentMissionIdx + 1 < totalM ? 'Lanjut Tantangan Berikutnya' : 'Selesaikan Zona & Klaim Lencana'}</span>
+                    <span>➔</span>
+                  </button>
+                </div>
+              `
+                : ''
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMissionInteractiveBody(mission) {
+      /* 1. PILIHAN GANDA */
+      if (mission.type === 'pg') {
+        const letters = ['A', 'B', 'C', 'D'];
+        return `
+          <div class="space-y-2.5">
+            ${mission.options
+              .map((opt, idx) => {
+                let style = 'bg-white hover:bg-sky-50 border-slate-300 text-slate-800';
+                if (state.answered) {
+                  if (idx === mission.answer) {
+                    style = 'bg-emerald-100 border-emerald-500 text-emerald-900 ring-2 ring-emerald-300';
+                  } else if (idx === state.pgSelected) {
+                    style = 'bg-rose-100 border-rose-500 text-rose-900';
+                  } else {
+                    style = 'bg-slate-50 border-slate-200 text-slate-400';
+                  }
+                }
+                return `
+                  <button
+                    type="button"
+                    ${state.answered ? 'disabled' : ''}
+                    onclick="submitPG(${idx})"
+                    class="btn-3d w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 flex items-center gap-3 ${style}"
+                  >
+                    <span class="w-9 h-9 rounded-xl bg-sky-100 text-sky-800 font-display font-bold flex items-center justify-center shrink-0">
+                      ${letters[idx]}
+                    </span>
+                    <span class="font-semibold text-sm sm:text-base leading-snug">${opt}</span>
+                  </button>
+                `;
+              })
+              .join('')}
+          </div>
+        `;
+      }
+
+      /* 2A. PILIHAN GANDA KOMPLEKS (CHECKBOXES) */
+      if (mission.type === 'pgk_check') {
+        return `
+          <div class="space-y-2.5">
+            ${mission.items
+              .map((item, idx) => {
+                const isChecked = state.pgkChecked.includes(idx);
+                const isRightItem = mission.correctIndices.includes(idx);
+                let style = isChecked
+                  ? 'bg-sky-100 border-sky-500 text-sky-900'
+                  : 'bg-white hover:bg-slate-50 border-slate-300 text-slate-800';
+                if (state.answered) {
+                  if (isRightItem) {
+                    style = 'bg-emerald-100 border-emerald-500 text-emerald-900';
+                  } else if (isChecked && !isRightItem) {
+                    style = 'bg-rose-100 border-rose-500 text-rose-900';
+                  } else {
+                    style = 'bg-slate-50 border-slate-200 text-slate-500';
+                  }
+                }
+                return `
+                  <button
+                    type="button"
+                    ${state.answered ? 'disabled' : ''}
+                    onclick="togglePGK(${idx})"
+                    class="btn-3d w-full text-left p-3.5 rounded-2xl border-2 flex items-center gap-3 ${style}"
+                  >
+                    <span class="w-8 h-8 rounded-lg border-2 flex items-center justify-center text-lg font-bold shrink-0 ${
+                      isChecked ? 'bg-sky-500 border-sky-700 text-white' : 'bg-white border-slate-300 text-transparent'
+                    }">
+                      ✓
+                    </span>
+                    <span class="font-semibold text-sm sm:text-base leading-snug">${item}</span>
+                  </button>
+                `;
+              })
+              .join('')}
+
+            ${
+              !state.answered
+                ? `
+              <div class="pt-2">
+                <button
+                  type="button"
+                  onclick="submitPGK()"
+                  class="btn-3d w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700 font-display font-bold text-base"
+                >
+                  Periksa Jawaban ✓
+                </button>
+              </div>
+            `
+                : ''
+            }
+          </div>
+        `;
+      }
+
+      /* 2B. PILIHAN GANDA KOMPLEKS (TABEL BENAR / SALAH) */
+      if (mission.type === 'pgk_tf') {
+        return `
+          <div class="space-y-3">
+            ${mission.statements
+              .map((st, idx) => {
+                const chosen = state.tfAnswers[idx]; // true | false | undefined
+                return `
+                  <div class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <p class="font-semibold text-sm sm:text-base text-slate-800 flex-1">${idx + 1}. ${st.text}</p>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        ${state.answered ? 'disabled' : ''}
+                        onclick="selectTF(${idx}, true)"
+                        class="btn-3d px-4 py-2 rounded-xl border-2 font-display font-bold text-xs sm:text-sm ${
+                          chosen === true
+                            ? 'bg-emerald-500 border-emerald-700 text-white'
+                            : 'bg-white border-slate-300 text-slate-700 hover:bg-emerald-50'
+                        }"
+                      >
+                        Benar
+                      </button>
+                      <button
+                        type="button"
+                        ${state.answered ? 'disabled' : ''}
+                        onclick="selectTF(${idx}, false)"
+                        class="btn-3d px-4 py-2 rounded-xl border-2 font-display font-bold text-xs sm:text-sm ${
+                          chosen === false
+                            ? 'bg-rose-500 border-rose-700 text-white'
+                            : 'bg-white border-slate-300 text-slate-700 hover:bg-rose-50'
+                        }"
+                      >
+                        Salah
+                      </button>
+                    </div>
+                  </div>
+                `;
+              })
+              .join('')}
+
+            ${
+              !state.answered
+                ? `
+              <div class="pt-1">
+                <button
+                  type="button"
+                  onclick="submitTF()"
+                  class="btn-3d w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700 font-display font-bold text-base"
+                >
+                  Kunci Jawaban Benar/Salah ✓
+                </button>
+              </div>
+            `
+                : ''
+            }
+          </div>
+        `;
+      }
+
+      /* 3. MINI-GAME MENJODOHKAN */
+      if (mission.type === 'match') {
+        const badgeColors = [
+          'bg-amber-100 border-amber-400 text-amber-900',
+          'bg-sky-100 border-sky-400 text-sky-900',
+          'bg-purple-100 border-purple-400 text-purple-900'
+        ];
+        return `
+          <div class="space-y-3">
+            <p class="text-xs font-bold text-slate-500">
+              💡 Cara bermain: Klik satu kartu di <strong>Kolom Kiri</strong>, lalu klik pasangannya di <strong>Kolom Kanan</strong>!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Left Column -->
+              <div class="space-y-2.5">
+                ${mission.pairs
+                  .map((p, idx) => {
+                    const isSelected = state.matchSelectedLeft === p.id;
+                    const pairedRightIdx = state.matchPairsDone[p.id];
+                    const isPaired = pairedRightIdx !== undefined;
+                    let cls = 'bg-white border-slate-300 text-slate-800 hover:border-sky-400';
+                    if (isSelected) cls = 'bg-sky-100 border-sky-500 text-sky-900 ring-2 ring-sky-300';
+                    else if (isPaired) cls = badgeColors[idx % badgeColors.length];
+
+                    return `
+                      <button
+                        type="button"
+                        ${state.answered ? 'disabled' : ''}
+                        onclick="clickMatchLeft('${p.id}')"
+                        class="btn-3d w-full text-left p-3.5 rounded-2xl border-2 font-bold text-sm flex items-center justify-between gap-2 ${cls}"
+                      >
+                        <span>${p.left}</span>
+                        ${isPaired ? `<span class="text-xs px-2 py-0.5 rounded-full bg-white/80">Terhubung</span>` : ''}
+                      </button>
+                    `;
+                  })
+                  .join('')}
+              </div>
+
+              <!-- Right Column -->
+              <div class="space-y-2.5">
+                ${state.matchShuffledRight
+                  .map((rItem) => {
+                    // Check which left id connected to rItem.idx
+                    const connectedLeftEntry = Object.entries(state.matchPairsDone).find(
+                      ([, rIdx]) => rIdx === rItem.idx
+                    );
+                    let cls = 'bg-white border-slate-300 text-slate-700 hover:border-amber-400';
+                    let tag = '';
+                    if (connectedLeftEntry) {
+                      const leftIdx = mission.pairs.findIndex((p) => p.id === connectedLeftEntry[0]);
+                      cls = badgeColors[leftIdx % badgeColors.length];
+                      tag = `<span class="text-xs font-extrabold px-2 py-0.5 rounded-full bg-white/80 shrink-0">#${leftIdx + 1}</span>`;
+                    }
+                    return `
+                      <button
+                        type="button"
+                        ${state.answered ? 'disabled' : ''}
+                        onclick="clickMatchRight(${rItem.idx})"
+                        class="btn-3d w-full text-left p-3.5 rounded-2xl border-2 font-semibold text-xs sm:text-sm flex items-center justify-between gap-2 ${cls}"
+                      >
+                        <span>${rItem.text}</span>
+                        ${tag}
+                      </button>
+                    `;
+                  })
+                  .join('')}
+              </div>
+            </div>
+
+            ${
+              !state.answered
+                ? `
+              <div class="flex flex-wrap items-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onclick="resetMatchPairs()"
+                  class="btn-3d px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300 font-display font-bold text-sm"
+                >
+                  🔄 Ulangi Pasangan
+                </button>
+                <button
+                  type="button"
+                  onclick="submitMatch()"
+                  class="btn-3d px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700 font-display font-bold text-base"
+                >
+                  Periksa Pasangan ✓
+                </button>
+              </div>
+            `
+                : ''
+            }
+          </div>
+        `;
+      }
+
+      /* 4. TANTANGAN ISIAN CEPAT */
+      if (mission.type === 'fill') {
+        return `
+          <div class="space-y-3">
+            <div class="bg-amber-50 border border-amber-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-amber-900 font-semibold">
+              🔍 Petunjuk: ${mission.hint}
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                id="fill-answer-input"
+                type="text"
+                ${state.answered ? 'disabled' : ''}
+                value="${state.fillInput}"
+                oninput="state.fillInput = this.value"
+                onkeydown="if(event.key==='Enter' && !state.answered) submitFill()"
+                placeholder="Ketik atau klik pilihan kata di bawah..."
+                class="flex-1 px-4 py-3 rounded-2xl border-2 border-sky-300 focus:border-sky-500 focus:outline-none font-display font-bold uppercase text-base sm:text-lg text-slate-800 bg-sky-50/50"
+              />
+              ${
+                !state.answered
+                  ? `
+                <button
+                  type="button"
+                  onclick="submitFill()"
+                  class="btn-3d px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-white border-emerald-700 font-display font-bold text-base shrink-0"
+                >
+                  Jawab ✓
+                </button>
+              `
+                  : ''
+              }
+            </div>
+
+            ${
+              mission.quickChoices && !state.answered
+                ? `
+              <div class="pt-1">
+                <p class="text-xs font-bold text-slate-500 mb-1.5">Atau pilih kartu jawaban cepat:</p>
+                <div class="flex flex-wrap gap-2">
+                  ${mission.quickChoices
+                    .map(
+                      (qc) => `
+                    <button
+                      type="button"
+                      onclick="pickQuickFill('${qc}')"
+                      class="btn-3d px-3.5 py-2 rounded-xl bg-white hover:bg-sky-50 border-2 border-sky-200 text-sky-900 font-display font-bold text-xs sm:text-sm"
+                    >
+                      ${qc}
+                    </button>
+                  `
+                    )
+                    .join('')}
+                </div>
+              </div>
+            `
+                : ''
+            }
+
+            ${
+              mission.letterBank && !state.answered
+                ? `
+              <div class="pt-1">
+                <p class="text-xs font-bold text-slate-500 mb-1.5">Bantuan Huruf Acak (klik untuk merangkai kata):</p>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  ${mission.letterBank
+                    .map(
+                      (ch) => `
+                    <button
+                      type="button"
+                      onclick="appendFillLetter('${ch}')"
+                      class="btn-3d w-9 h-9 rounded-xl bg-amber-100 hover:bg-amber-200 border-2 border-amber-400 text-amber-900 font-display font-bold text-sm"
+                    >
+                      ${ch}
+                    </button>
+                  `
+                    )
+                    .join('')}
+                  <button
+                    type="button"
+                    onclick="clearFillInput()"
+                    class="btn-3d px-3 h-9 rounded-xl bg-rose-100 hover:bg-rose-200 border-2 border-rose-300 text-rose-800 font-bold text-xs"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            `
+                : ''
+            }
+          </div>
+        `;
+      }
+
+      /* 5. MISI KASUS PENALARAN (ADAPTASI SOAL URAIAN) */
+      if (mission.type === 'case') {
+        return `
+          <div class="space-y-3">
+            <p class="text-xs font-bold text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1.5 rounded-xl inline-block">
+              🧠 Misi Penalaran & Pengambilan Keputusan
+            </p>
+            <div class="space-y-2.5">
+              ${mission.options
+                .map((opt, idx) => {
+                  let cls = 'bg-white hover:bg-amber-50 border-slate-300 text-slate-800';
+                  if (state.answered) {
+                    if (opt.isCorrect) {
+                      cls = 'bg-emerald-100 border-emerald-500 text-emerald-900 ring-2 ring-emerald-300';
+                    } else if (idx === state.caseSelected) {
+                      cls = 'bg-rose-100 border-rose-500 text-rose-900';
+                    } else {
+                      cls = 'bg-slate-50 border-slate-200 text-slate-400';
+                    }
+                  }
+                  return `
+                    <button
+                      type="button"
+                      ${state.answered ? 'disabled' : ''}
+                      onclick="submitCase(${idx})"
+                      class="btn-3d w-full text-left p-4 rounded-2xl border-2 space-y-1 ${cls}"
+                    >
+                      <div class="font-display font-bold text-sm sm:text-base">${opt.title}</div>
+                      <p class="text-xs sm:text-sm opacity-90 leading-relaxed">${opt.desc}</p>
+                    </button>
+                  `;
+                })
+                .join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    /* =========================================================================
+       7. MISSION SUBMISSION & SCORING LOGIC
+       ========================================================================= */
+    function finalizeAnswer(isCorrect) {
+      state.answered = true;
+      state.isCurrentCorrect = isCorrect;
+
+      if (isCorrect) {
+        SoundFX.correct();
+        triggerBurstFromCenter();
+        state.streak += 1;
+        if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+        const bonus = state.streak >= 3 ? 5 : 0;
+        const gained = 20 + bonus;
+        state.xp += gained;
+        state.zoneProgress[state.currentZoneId].correctCount += 1;
+        state.zoneProgress[state.currentZoneId].xpEarned += gained;
+      } else {
+        SoundFX.wrong();
+        state.streak = 0;
+        if (state.hearts > 0) state.hearts -= 1;
+        const card = document.getElementById('mission-card');
+        if (card) {
+          card.classList.remove('animate-shake');
+          void card.offsetWidth;
+          card.classList.add('animate-shake');
+        }
+      }
+      render();
+    }
+
+    // PG Handler
+    function submitPG(idx) {
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      state.pgSelected = idx;
+      finalizeAnswer(idx === mission.answer);
+    }
+
+    // PGK Checkbox Handlers
+    function togglePGK(idx) {
+      SoundFX.click();
+      const pos = state.pgkChecked.indexOf(idx);
+      if (pos === -1) state.pgkChecked.push(idx);
+      else state.pgkChecked.splice(pos, 1);
+      render();
+    }
+
+    function submitPGK() {
+      if (state.pgkChecked.length === 0) {
+        SoundFX.wrong();
+        showToast('Pilih minimal satu pernyataan terlebih dahulu!', '☑️');
+        return;
+      }
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      const sortedUser = [...state.pgkChecked].sort().join(',');
+      const sortedRight = [...mission.correctIndices].sort().join(',');
+      finalizeAnswer(sortedUser === sortedRight);
+    }
+
+    // PGK True/False Handlers
+    function selectTF(rowIdx, val) {
+      SoundFX.click();
+      state.tfAnswers[rowIdx] = val;
+      render();
+    }
+
+    function submitTF() {
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      if (Object.keys(state.tfAnswers).length < mission.statements.length) {
+        SoundFX.wrong();
+        showToast('Lengkapi semua pilihan Benar atau Salah di setiap baris!', '📋');
+        return;
+      }
+      const allRight = mission.statements.every((st, idx) => state.tfAnswers[idx] === st.isTrue);
+      finalizeAnswer(allRight);
+    }
+
+    // Matching Handlers
+    function clickMatchLeft(leftId) {
+      SoundFX.click();
+      state.matchSelectedLeft = state.matchSelectedLeft === leftId ? null : leftId;
+      render();
+    }
+
+    function clickMatchRight(rightIdx) {
+      if (!state.matchSelectedLeft) {
+        SoundFX.wrong();
+        showToast('Klik kartu di kolom kiri terlebih dahulu!', '👈');
+        return;
+      }
+      SoundFX.click();
+      // Remove any previous left item mapped to this rightIdx
+      for (const [k, v] of Object.entries(state.matchPairsDone)) {
+        if (v === rightIdx) delete state.matchPairsDone[k];
+      }
+      state.matchPairsDone[state.matchSelectedLeft] = rightIdx;
+      state.matchSelectedLeft = null;
+      render();
+    }
+
+    function resetMatchPairs() {
+      SoundFX.click();
+      state.matchSelectedLeft = null;
+      state.matchPairsDone = {};
+      render();
+    }
+
+    function submitMatch() {
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      if (Object.keys(state.matchPairsDone).length < mission.pairs.length) {
+        SoundFX.wrong();
+        showToast('Hubungkan semua 3 pasangan kartu sebelum memeriksa!', '🔗');
+        return;
+      }
+      const allMatched = mission.pairs.every((p, idx) => state.matchPairsDone[p.id] === idx);
+      finalizeAnswer(allMatched);
+    }
+
+    // Fill-in Handlers
+    function pickQuickFill(text) {
+      SoundFX.click();
+      state.fillInput = text;
+      render();
+    }
+
+    function appendFillLetter(ch) {
+      SoundFX.click();
+      state.fillInput = (state.fillInput + ch).toUpperCase();
+      render();
+    }
+
+    function clearFillInput() {
+      SoundFX.click();
+      state.fillInput = '';
+      render();
+    }
+
+    function submitFill() {
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      const cleaned = state.fillInput.trim().toUpperCase().replace(/\s+/g, ' ');
+      if (!cleaned) {
+        SoundFX.wrong();
+        showToast('Isi jawabanmu terlebih dahulu!', '✍️');
+        return;
+      }
+      // Accept 'PBB' or 'PERSERIKATAN BANGSA-BANGSA'
+      const isPbbAlias =
+        mission.answer === 'PBB' &&
+        (cleaned === 'PBB' || cleaned.includes('PERSERIKATAN BANGSA'));
+      const isExact = cleaned === mission.answer.toUpperCase();
+      finalizeAnswer(isExact || isPbbAlias);
+    }
+
+    // Case Reasoning Handler
+    function submitCase(idx) {
+      const mission = ZONES[state.currentZoneId].missions[state.currentMissionIdx];
+      state.caseSelected = idx;
+      finalizeAnswer(Boolean(mission.options[idx].isCorrect));
+    }
+
+    // Next Mission / Complete Zone
+    function nextMission() {
+      SoundFX.click();
+      const zone = ZONES[state.currentZoneId];
+      if (state.currentMissionIdx + 1 < zone.missions.length) {
+        state.currentMissionIdx += 1;
+        prepareMissionState();
+        render();
+      } else {
+        // Zone Completed!
+        state.zoneProgress[state.currentZoneId].completed = true;
+        SoundFX.badge();
+        triggerBurstFromCenter();
+        showToast(`Selamat! Kamu meraih ${zone.badgeName}!`, zone.badgeIcon);
+        const allDone = state.zoneProgress.every((z) => z.completed);
+        state.screen = allDone ? 'certificate' : 'map';
+        render();
+      }
+    }
+
+    /* --- SCREEN 4: CERTIFICATE & SUMMARY --- */
+    function openCertificate() {
+      SoundFX.badge();
+      triggerBurstFromCenter();
+      state.screen = 'certificate';
+      render();
+    }
+
+    function renderCertificateScreen() {
+      const av = getAvatar();
+      const totalCorrect = state.zoneProgress.reduce((acc, z) => acc + z.correctCount, 0);
+      const totalMissions = ZONES.reduce((acc, z) => acc + z.missions.length, 0);
+      const accuracy = Math.round((totalCorrect / totalMissions) * 100);
+
+      let predikat = 'Terus Berlatih 🌱';
+      let predikatDesc = 'Semangat! Ulangi zona yang belum sempurna untuk meraih lencana emas.';
+      if (accuracy >= 85) {
+        predikat = 'Mahir (Penjaga Utama Nusantara) 🏆';
+        predikatDesc = 'Luar biasa! Penguasaan sains, sejarah, geografi, dan budaya Indonesiamu sangat mengagumkan!';
+      } else if (accuracy >= 65) {
+        predikat = 'Cakap (Penjelajah Handal) 🌟';
+        predikatDesc = 'Bagus sekali! Kamu sudah memahami sebagian besar materi IPAS Kelas 6 dengan baik.';
+      }
+
+      return `
+        <div class="max-w-3xl mx-auto space-y-5 animate-pop">
+          <div class="card-adventure print-only-clean p-6 sm:p-8 border-4 border-amber-400 bg-gradient-to-b from-amber-50 via-white to-sky-50 text-center space-y-5">
+            <div class="inline-block px-4 py-1 rounded-full bg-amber-200/80 text-amber-900 font-display font-bold text-xs tracking-wider uppercase">
+              SERTIFIKAT PENGHARGAAN PETUALANG IPAS
+            </div>
+
+            <div class="text-5xl sm:text-6xl">${av.emoji}🏆</div>
+
+            <div>
+              <p class="text-slate-500 text-sm font-semibold">Diberikan dengan bangga kepada:</p>
+              <h2 class="font-display font-bold text-2xl sm:text-4xl text-sky-900 mt-1">
+                ${state.playerName}
+              </h2>
+              <p class="font-display font-semibold text-amber-700 text-sm sm:text-base mt-0.5">
+                Peran: ${av.role}
+              </p>
+            </div>
+
+            <div class="max-w-lg mx-auto bg-white/90 border-2 border-amber-200 rounded-2xl p-4">
+              <div class="text-xs font-bold text-slate-500 uppercase">Predikat Penguasaan AKM</div>
+              <div class="font-display font-bold text-lg sm:text-xl text-emerald-700 mt-0.5">${predikat}</div>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">${predikatDesc}</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-2.5 max-w-lg mx-auto">
+              <div class="bg-amber-100/80 border border-amber-300 rounded-2xl p-3">
+                <div class="text-xs font-bold text-amber-800">Total XP</div>
+                <div class="font-display font-bold text-lg sm:text-2xl text-amber-900">${state.xp}</div>
+              </div>
+              <div class="bg-emerald-100/80 border border-emerald-300 rounded-2xl p-3">
+                <div class="text-xs font-bold text-emerald-800">Misi Tepat</div>
+                <div class="font-display font-bold text-lg sm:text-2xl text-emerald-900">${totalCorrect}/${totalMissions}</div>
+              </div>
+              <div class="bg-sky-100/80 border border-sky-300 rounded-2xl p-3">
+                <div class="text-xs font-bold text-sky-800">Skor AKM</div>
+                <div class="font-display font-bold text-lg sm:text-2xl text-sky-900">${accuracy}%</div>
+              </div>
+            </div>
+
+            <!-- Zone Breakdown & Badges -->
+            <div class="text-left space-y-2 pt-2">
+              <h3 class="font-display font-bold text-slate-700 text-sm sm:text-base">
+                Koleksi Lencana & Rekap Capaian per Bab:
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                ${ZONES.map((z, idx) => {
+                  const prog = state.zoneProgress[idx];
+                  return `
+                    <div class="p-3 rounded-2xl border-2 flex items-center justify-between gap-2 ${
+                      prog.completed ? 'bg-white border-amber-300' : 'bg-slate-50 border-slate-200 opacity-75'
+                    }">
+                      <div class="flex items-center gap-2.5">
+                        <span class="text-2xl">${prog.completed ? z.badgeIcon : '🔒'}</span>
+                        <div>
+                          <div class="font-display font-bold text-xs sm:text-sm text-slate-800">${z.bab}: ${z.title}</div>
+                          <div class="text-xs text-slate-500">${prog.completed ? z.badgeName : 'Belum dituntaskan'}</div>
+                        </div>
+                      </div>
+                      <span class="font-display font-bold text-xs px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 shrink-0">
+                        ${prog.correctCount}/${prog.totalMissions}
+                      </span>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-3 no-print">
+              <button
+                type="button"
+                onclick="goToMap()"
+                class="btn-3d px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 text-white border-sky-700 font-display font-bold text-sm sm:text-base"
+              >
+                🗺️ Kembali ke Peta Pulau
+              </button>
+              <button
+                type="button"
+                onclick="window.print()"
+                class="btn-3d px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-white border-amber-700 font-display font-bold text-sm sm:text-base"
+              >
+                🖨️ Cetak Sertifikat
+              </button>
+              <button
+                type="button"
+                onclick="resetWholeGame()"
+                class="btn-3d px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300 font-display font-bold text-sm sm:text-base"
+              >
+                🔄 Main Dari Awal
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function resetWholeGame() {
+      SoundFX.click();
+      state.xp = 0;
+      state.hearts = 5;
+      state.streak = 0;
+      state.bestStreak = 0;
+      state.zoneProgress = ZONES.map((z) => ({
+        completed: false,
+        correctCount: 0,
+        totalMissions: z.missions.length,
+        xpEarned: 0
+      }));
+      state.screen = 'welcome';
+      render();
+    }
+
+    /* =========================================================================
+       8. INITIALIZE APPLICATION ON LOAD
+       ========================================================================= */
+    window.onload = function () {
+      ParticleFX.init();
+      render();
+    };
+  </script>
+</body>
+</html>

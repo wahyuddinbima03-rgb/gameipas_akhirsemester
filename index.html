@@ -1,0 +1,280 @@
+import React, { useState } from 'react';
+import { 
+  Beaker, 
+  Hourglass, 
+  Globe2, 
+  HeartHandshake, 
+  Award, 
+  X, 
+  CheckCircle2, 
+  AlertCircle,
+  Map as MapIcon
+} from 'lucide-react';
+
+// Data Zona Eksplorasi
+const ZONES = [
+  {
+    id: 1,
+    title: "Laboratorium Anatomi",
+    icon: Beaker,
+    color: "bg-blue-400",
+    hoverColor: "hover:bg-blue-500",
+    borderColor: "border-blue-600",
+    story: "Kamu masuk ke laboratorium dan melihat simulasi tubuh manusia. Saat seseorang melempar bola, ada bagian tubuh yang memberi perintah super cepat!",
+    question: "Organ apa yang berfungsi sebagai pusat kendali untuk mengirimkan pesan melalui sistem saraf agar otot tangan bergerak?",
+    options: ["Tulang belakang", "Sendi bahu", "Otak", "Saraf tepi"],
+    correctAnswer: "Otak",
+    badgeName: "Lencana Neuron",
+    badgeEmoji: "🧠"
+  },
+  {
+    id: 2,
+    title: "Lorong Waktu Sejarah",
+    icon: Hourglass,
+    color: "bg-amber-400",
+    hoverColor: "hover:bg-amber-500",
+    borderColor: "border-amber-600",
+    story: "Mesin waktu membawamu ke abad ke-16! Kamu melihat banyak kapal layar Eropa bersandar di pelabuhan Nusantara.",
+    question: "Apakah tujuan utama kedatangan bangsa-bangsa Eropa ke Nusantara pada masa itu?",
+    options: ["Membangun pangkalan militer", "Mencari dan menguasai rempah-rempah", "Menyebarkan teknologi kapal layar", "Mencari tempat berlibur"],
+    correctAnswer: "Mencari dan menguasai rempah-rempah",
+    badgeName: "Lencana Rempah",
+    badgeEmoji: "🌿"
+  },
+  {
+    id: 3,
+    title: "Observatorium Geografi",
+    icon: Globe2,
+    color: "bg-emerald-400",
+    hoverColor: "hover:bg-emerald-500",
+    borderColor: "border-emerald-600",
+    story: "Kamu melihat peta dunia raksasa hologram. Ada 6 benua dengan iklim dan kondisi alam yang sangat berbeda satu sama lain.",
+    question: "Benua manakah yang karakteristik utamanya secara permanen ditutupi oleh lapisan es tebal sepanjang tahun?",
+    options: ["Benua Asia", "Benua Antartika", "Benua Eropa", "Benua Australia"],
+    correctAnswer: "Benua Antartika",
+    badgeName: "Lencana Kristal Es",
+    badgeEmoji: "❄️"
+  },
+  {
+    id: 4,
+    title: "Markas Persahabatan Global",
+    icon: HeartHandshake,
+    color: "bg-rose-400",
+    hoverColor: "hover:bg-rose-500",
+    borderColor: "border-rose-600",
+    story: "Di markas ini, kamu melihat pameran budaya Indonesia yang memukau perwakilan negara-negara dari seluruh dunia.",
+    question: "Warisan kebudayaan lisan dan nonbendawi asli Indonesia yang telah diakui secara resmi oleh lembaga UNESCO pada tahun 2009 adalah...",
+    options: ["Kimono", "Tari Tango", "Batik", "K-Pop"],
+    correctAnswer: "Batik",
+    badgeName: "Lencana Budaya Dunia",
+    badgeEmoji: "🌏"
+  }
+];
+
+export default function PetualanganIPAS() {
+  const [completedZones, setCompletedZones] = useState([]);
+  const [activeZone, setActiveZone] = useState(null);
+  const [feedback, setFeedback] = useState(null);
+
+  const handleZoneClick = (zone) => {
+    if (!completedZones.includes(zone.id)) {
+      setActiveZone(zone);
+      setFeedback(null);
+    }
+  };
+
+  const handleAnswer = (selectedOption) => {
+    if (selectedOption === activeZone.correctAnswer) {
+      setFeedback({ type: 'success', message: 'Tepat Sekali! Kamu mendapatkan lencana!' });
+      setTimeout(() => {
+        setCompletedZones([...completedZones, activeZone.id]);
+        setActiveZone(null);
+        setFeedback(null);
+      }, 2000);
+    } else {
+      setFeedback({ type: 'error', message: 'Ups, kurang tepat. Coba baca lagi ceritanya!' });
+    }
+  };
+
+  const resetGame = () => {
+    setCompletedZones([]);
+    setActiveZone(null);
+    setFeedback(null);
+  };
+
+  const isGameWon = completedZones.length === ZONES.length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-sky-200 to-indigo-100 font-sans selection:bg-indigo-300 flex flex-col">
+      
+      {/* Header & Inventory */}
+      <header className="bg-white/80 backdrop-blur-md shadow-sm p-4 sticky top-0 z-10 border-b-4 border-indigo-200">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <MapIcon className="w-8 h-8 text-indigo-600" />
+            <h1 className="text-2xl font-black text-indigo-900 tracking-tight">Petualangan IPAS Nusantara</h1>
+          </div>
+          
+          <div className="bg-indigo-50 px-4 py-2 rounded-2xl border-2 border-indigo-100 flex items-center gap-3">
+            <span className="font-bold text-indigo-800 flex items-center gap-1">
+              <Award className="w-5 h-5 text-yellow-500" /> Lencana:
+            </span>
+            <div className="flex gap-2">
+              {ZONES.map(zone => {
+                const isCompleted = completedZones.includes(zone.id);
+                return (
+                  <div 
+                    key={zone.id} 
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-sm border-2 transition-all ${
+                      isCompleted ? 'bg-white border-yellow-400 scale-110' : 'bg-gray-100 border-gray-200 grayscale opacity-50'
+                    }`}
+                    title={isCompleted ? zone.badgeName : "Lencana terkunci"}
+                  >
+                    {zone.badgeEmoji}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 w-full max-w-5xl mx-auto p-6 flex flex-col justify-center items-center">
+        
+        {isGameWon ? (
+          // Victory Screen
+          <div className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl text-center border-8 border-yellow-400 max-w-2xl animate-bounce-in">
+            <div className="text-7xl mb-6">🏆🥳✨</div>
+            <h2 className="text-4xl font-black text-indigo-900 mb-4">Luar Biasa!</h2>
+            <p className="text-xl text-gray-700 mb-8 font-medium">
+              Kamu telah mengumpulkan semua lencana dan membuktikan dirimu sebagai <span className="font-bold text-indigo-600">Master IPAS Nusantara!</span>
+            </p>
+            <div className="flex justify-center gap-4 mb-8 flex-wrap">
+              {ZONES.map(z => (
+                <div key={z.id} className="bg-indigo-50 p-3 rounded-xl border-2 border-indigo-100 flex flex-col items-center gap-2">
+                  <span className="text-3xl">{z.badgeEmoji}</span>
+                  <span className="text-xs font-bold text-indigo-800 text-center w-20 leading-tight">{z.badgeName}</span>
+                </div>
+              ))}
+            </div>
+            <button 
+              onClick={resetGame}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 active:translate-y-0"
+            >
+              Main Lagi
+            </button>
+          </div>
+        ) : (
+          // Map View
+          <div className="w-full">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-black text-indigo-900 mb-3 drop-shadow-sm">Pilih Zona Penjelajahanmu!</h2>
+              <p className="text-lg text-indigo-700 font-medium">Kumpulkan 4 lencana untuk menyelesaikan misi.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {ZONES.map(zone => {
+                const Icon = zone.icon;
+                const isCompleted = completedZones.includes(zone.id);
+                
+                return (
+                  <button
+                    key={zone.id}
+                    onClick={() => handleZoneClick(zone)}
+                    disabled={isCompleted}
+                    className={`relative group p-6 rounded-3xl border-b-8 border-r-4 transition-all duration-200 text-left flex items-start gap-4 ${
+                      isCompleted 
+                        ? 'bg-gray-100 border-gray-300 opacity-60 cursor-not-allowed' 
+                        : `${zone.color} ${zone.hoverColor} ${zone.borderColor} text-white shadow-xl hover:-translate-y-2 hover:shadow-2xl active:translate-y-0 active:border-b-4`
+                    }`}
+                  >
+                    <div className={`p-4 rounded-2xl ${isCompleted ? 'bg-gray-200' : 'bg-white/20'}`}>
+                      <Icon className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h3 className={`text-xl font-bold mb-1 ${isCompleted ? 'text-gray-500' : 'text-white'}`}>
+                        {zone.title}
+                      </h3>
+                      <p className={`text-sm font-medium ${isCompleted ? 'text-gray-400' : 'text-white/90'}`}>
+                        {isCompleted ? 'Misi Selesai' : 'Mulai Jelajah →'}
+                      </p>
+                    </div>
+                    {isCompleted && (
+                      <div className="absolute top-4 right-4 text-green-500 bg-white rounded-full p-1 shadow-sm">
+                        <CheckCircle2 className="w-8 h-8" />
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Quiz Modal */}
+      {activeZone && (
+        <div className="fixed inset-0 bg-indigo-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+            
+            {/* Modal Header */}
+            <div className={`${activeZone.color} p-6 flex justify-between items-center text-white relative`}>
+              <div className="flex items-center gap-3 relative z-10">
+                <activeZone.icon className="w-8 h-8" />
+                <h3 className="text-2xl font-bold">{activeZone.title}</h3>
+              </div>
+              <button 
+                onClick={() => setActiveZone(null)}
+                className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors relative z-10"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              {/* Decorative shapes */}
+              <div className="absolute right-0 top-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10"></div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 md:p-8 overflow-y-auto">
+              <div className="bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 mb-6 text-slate-700 font-medium leading-relaxed shadow-inner">
+                📖 {activeZone.story}
+              </div>
+              
+              <div className="mb-6">
+                <h4 className="text-xl font-bold text-indigo-900 mb-4">Pertanyaan:</h4>
+                <p className="text-lg text-slate-800 font-semibold mb-6">{activeZone.question}</p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {activeZone.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleAnswer(option)}
+                      className="p-4 bg-white border-2 border-indigo-100 hover:border-indigo-400 hover:bg-indigo-50 rounded-xl text-left font-bold text-indigo-800 transition-all hover:shadow-md active:bg-indigo-100"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Feedback Area */}
+              {feedback && (
+                <div className={`p-4 rounded-xl flex items-center gap-3 font-bold animate-pulse ${
+                  feedback.type === 'success' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-red-100 text-red-800 border-2 border-red-200'
+                }`}>
+                  {feedback.type === 'success' ? <CheckCircle2 className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
+                  {feedback.message}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Footer */}
+      <footer className="text-center p-4 text-indigo-500/70 font-medium text-sm">
+        Dirancang untuk Pembelajaran IPAS Kelas 6 SD
+      </footer>
+    </div>
+  );
+}
